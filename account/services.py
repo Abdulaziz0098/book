@@ -3,7 +3,7 @@ import datetime
 import jwt
 from typing import TYPE_CHECKING
 from django.conf import settings
-from . import models
+from django.contrib.auth import get_user_model
 
 if TYPE_CHECKING:
     from .models import User
@@ -28,7 +28,8 @@ class UserDataClass:
 
 
 def create_user(user_dc: "UserDataClass") -> "UserDataClass":
-    instance = models.User(
+    User = get_user_model()
+    instance = User(
         first_name=user_dc.first_name, last_name=user_dc.last_name, email=user_dc.email
     )
     if user_dc.password is not None:
@@ -40,7 +41,8 @@ def create_user(user_dc: "UserDataClass") -> "UserDataClass":
 
 
 def user_email_selector(email: str) -> "User":
-    user = models.User.objects.filter(email=email).first()
+    User = get_user_model()
+    user = User.objects.filter(email=email).first()
 
     return user
 
@@ -48,7 +50,7 @@ def user_email_selector(email: str) -> "User":
 def create_token(user_id: int) -> str:
     payload = dict(
         id=user_id,
-        exp=datetime.datetime.utcnow() + datetime.timedelta(hours=24),
+        exp=datetime.datetime.utcnow() + datetime.timedelta(hours=settings.JWT_EXPIRATION_HOURS),
         iat=datetime.datetime.utcnow(),
     )
     token = jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
