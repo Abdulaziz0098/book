@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from django.core.mail import send_mail
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,8 +125,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User'
 JWT_SECRET = "secreatkey12345"
-
+URL = 'http://127.0.0.1:8000'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'PAGE_SIZE': 2,
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'Your_Email'
+EMAIL_HOST_PASSWORD = 'Your_Password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
