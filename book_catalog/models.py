@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Avg
 
 from account.models import User
 
@@ -29,9 +30,17 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def average_rating(self):
+        average_rating = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        if average_rating is not None:
+            return round(average_rating, 2)
+        else:
+            return 0.00
+
 
 class Review(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
     text = models.TextField()

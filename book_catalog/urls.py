@@ -21,15 +21,13 @@ urlpatterns = [
     path('books/<int:pk>/update/', book_view.update_book, name='update-book'),
     path('books/<int:pk>/delete/', book_view.delete_book, name='delete-book'),
 
-    path('reviews/', review_view.review_list, name='review-list'),
+    path('reviews/<int:pk>/', review_view.review_list, name='review-list'),
     path('reviews/create/', review_view.create_review, name='create-review'),
     path('reviews/<int:pk>/', review_view.get_review, name='get-review'),
     path('reviews/<int:pk>/update/', review_view.update_review, name='update-review'),
     path('reviews/<int:pk>/delete/', review_view.delete_review, name='delete-review'),
 
-    path('wishlists/', wish_view.wishlist_list, name='wishlist-list'),
-    path('wishlists/create/', wish_view.create_wishlist, name='create-wishlist'),
-    path('wishlists/<int:pk>/', wish_view.get_wishlist, name='get-wishlist'),
-    path('wishlists/<int:pk>/update/', wish_view.update_wishlist, name='update-wishlist'),
-    path('wishlists/<int:pk>/delete/', wish_view.delete_wishlist, name='delete-wishlist'),
+    path('wishlists/list', wish_view.wishlist_list, name='wishlist-list'),
+    path('wishlists/', wish_view.wishlist_post_delete, name='create-wishlist'),
+    path('wishlists/<int:pk>/', wish_view.get_wishlist, name='get-wishlist')
 ]

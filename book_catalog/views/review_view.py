@@ -14,8 +14,8 @@ from book_catalog.serializers import ReviewSerializer
     }
 )
 @api_view(['GET'])
-def review_list(request):
-    reviews = Review.objects.all()
+def review_list(request, pk):
+    reviews = Review.objects.filter(book=pk)
     serializer = ReviewSerializer(reviews, many=True)
     return Response(serializer.data)
 

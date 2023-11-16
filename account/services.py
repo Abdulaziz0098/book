@@ -1,12 +1,10 @@
 import dataclasses
 import datetime
 import jwt
-from typing import TYPE_CHECKING
-from django.conf import settings
 from django.contrib.auth import get_user_model
 
-if TYPE_CHECKING:
-    from .models import User
+from book import settings
+from .models import User
 
 
 @dataclasses.dataclass
@@ -50,7 +48,7 @@ def user_email_selector(email: str) -> "User":
 def create_token(user_id: int) -> str:
     payload = dict(
         id=user_id,
-        exp=datetime.datetime.utcnow() + datetime.timedelta(hours=settings.JWT_EXPIRATION_HOURS),
+        exp=datetime.datetime.utcnow() + datetime.timedelta(hours=2),
         iat=datetime.datetime.utcnow(),
     )
     token = jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
