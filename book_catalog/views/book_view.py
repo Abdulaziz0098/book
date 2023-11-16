@@ -37,7 +37,7 @@ def book_list(request):
     if publication_date:
         books = books.filter(publication_date=publication_date)
 
-    serializer = BookListSerializer(books, many=True)
+    serializer = BookListSerializer(books, many=True, context={'request': request})
     return Response(serializer.data)
 
 
@@ -69,7 +69,7 @@ def create_book(request):
 def get_book(request, pk):
     try:
         book = Book.objects.get(pk=pk)
-        serializer = BookDetailSerializer(book)
+        serializer = BookDetailSerializer(book, context={'request': request})
         return Response(serializer.data)
     except Book.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

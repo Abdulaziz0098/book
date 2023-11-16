@@ -42,10 +42,17 @@ class BookListSerializer(serializers.ModelSerializer):
     author = AuthorSerializer()
     genre = GenreSerializer()
     average_rating = serializers.FloatField(read_only=True)
+    in_wishlist = serializers.SerializerMethodField()
 
     class Meta:
         model = Book
-        fields = ['id', 'title', 'author', 'genre', 'average_rating']
+        fields = ['id', 'title', 'author', 'genre', 'average_rating', 'in_wishlist']
+
+    def get_in_wishlist(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return Wishlist.objects.filter(user=user, book=obj).exists()
+        return False
 
 
 class BookDetailSerializer(serializers.ModelSerializer):
@@ -53,7 +60,15 @@ class BookDetailSerializer(serializers.ModelSerializer):
     genre = GenreSerializer()
     reviews = ReviewSerializer(many=True, read_only=True)
     average_rating = serializers.FloatField(read_only=True)
+    in_wishlist = serializers.SerializerMethodField()
 
     class Meta:
         model = Book
-        fields = ['id', 'title', 'author', 'genre', 'average_rating', 'publication_date', 'description', 'reviews']
+        fields = '__all__'
+        extra_fields = ['author', 'genre', 'reviews', 'average_rating', 'in_wishlist']
+
+    def get_in_wishlist(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return Wishlist.objects.filter(user=user, book=obj).exists()
+        return False
